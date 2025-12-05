@@ -14,9 +14,6 @@ app.use(express.json());
 // 密码验证中间件
 function requireAuth(req, res, next) {
   const password = req.headers['x-admin-password'];
-  if(!process.env.PASSWORD){
-    saveAdminPassword(process.env.PASSWORD)
-  }
   const savedPassword = loadAdminPassword();
   
   if (!savedPassword) {
@@ -466,6 +463,9 @@ app.get('/api/check-password', (req, res) => {
 // 设置管理员密码（首次）
 app.post('/api/set-password', (req, res) => {
   const { password } = req.body;
+    if(!process.env.PASSWORD){
+    saveAdminPassword(process.env.PASSWORD)
+  }
   const savedPassword = loadAdminPassword();
   
   if (savedPassword) {
