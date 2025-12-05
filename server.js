@@ -456,6 +456,10 @@ function getEnvAccounts() {
 
 // 检查是否已设置密码
 app.get('/api/check-password', (req, res) => {
+  if(process.env.PASSWORD){
+    saveAdminPassword(process.env.PASSWORD)
+  }
+
   const savedPassword = loadAdminPassword();
   res.json({ hasPassword: !!savedPassword });
 });
@@ -463,10 +467,7 @@ app.get('/api/check-password', (req, res) => {
 // 设置管理员密码（首次）
 app.post('/api/set-password', (req, res) => {
   const { password } = req.body;
-    if(process.env.PASSWORD){
-    saveAdminPassword(process.env.PASSWORD)
-  }
-  const savedPassword = loadAdminPassword();
+    const savedPassword = loadAdminPassword();
   
   if (savedPassword) {
     return res.status(400).json({ error: '密码已设置，无法重复设置' });
